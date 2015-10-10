@@ -8,6 +8,9 @@ install:
 script:
   - cd cwtail && go build ./...
   - go test -v ./...
+  - go get github.com/laher/goxc
+  - env GOROOT_BOOTSTRAP=${GOROOT} goxc -t -bc="freebsd,amd64 linux,amd64 windows,386 darwin,amd64"
+  - goxc -tasks='xc archive' -bc="freebsd,amd64 linux,amd64 windows,386 darwin,amd64" -wd cwtail -d .
 
 before_deploy:
   - go get github.com/laher/goxc
