@@ -17,10 +17,10 @@ before_deploy:
 deploy:
   provider: releases
   file:
-    - cwtail/snapshot/cwtail_darwin_amd64.zip
-    - cwtail/snapshot/cwtail_freebsd_amd64.zip
-    - cwtail/snapshot/cwtail_linux_amd64.tar.gz
-    - cwtail/snapshot/cwtail_windows_386.zip
+    - snapshot/cwtail_darwin_amd64.zip
+    - snapshot/cwtail_freebsd_amd64.zip
+    - snapshot/cwtail_linux_amd64.tar.gz
+    - snapshot/cwtail_windows_386.zip
   api_key:
     secure: wfRDFWA5ineSmage72FrIXMA6LGRP7v5vTi2IO2RfJIm6njUpS8zOZ0HFF8MWUXXIYWy5QfRFLZzq6W5tQY2+OeBnIfx12kpu0HWetfTIAOptRZL6V2fUvlDUY2ORpk2ZEx/T69oGpsPzd++hAzNBCYv1vqHBS2qG4ELa0wmoY8I2ysfBPV99BZ/DpSREMcyrle6PsQQi6GODVPsPiyfusErnzmU5G9BYppRPfQ12u/5zF1TylzF5+tIoksWhCMMmtgJSPgGLYyk1T/0Apwe0HACAaQBq7Dd7+ikqbo09Ip5eN8t+fbyJUf9ey775XaVJsfHb+q+5ci8LUIux8GLSxxE3sP6xu7Bxg2YIH+SMmWZwQ9EipvNEWDkDpVKr5fwtI7EFGGpED9TlM7ApC/oMqk3ZnfmOAIsxIz/nvEDASuXB6vPyvxgtX/c+jWzGVLooq8X7BDwZTMBpCpYdJOdSBArwD8WEJP8xY4FX8SNG17s28ESqt+o3s0YmKvc0XYLrVHGedqD4CVXsmtrtxSrIARIkooasdMpKcoGY70ADLC3P4bmGOX3E7/20M0hkzOJ6mRog1AVbchqgXIvx79z3AFoEOlOI1AL+zRq3mvVy+GzISDuyK+IqmihF2pYmddAH5pZcObZXQ02ZE9X70WfWeFawE19sSMXrxWN63Wh5Yw=
   on:
