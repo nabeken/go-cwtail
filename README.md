@@ -42,6 +42,6 @@ See [SDK documentation](http://docs.aws.amazon.com/sdk-for-go/api/) for more det
 
 ```sh
 cwtail -f \
-  logs://log-group/log-stream-1
-  logs://log-group/log-stream-2
+  log-group@log-stream-1 \
+  log-group@log-stream-2
 ```

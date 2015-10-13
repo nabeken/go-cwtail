@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -21,8 +20,7 @@ import (
 const schema = "logs"
 
 var (
-	errInvalidSchema = errors.New("cwtail: schema must be `logs`")
-	errInvalidURL    = errors.New("cwtail: invalid URL specified")
+	errInvalidLogStreamLocation = errors.New("cwtail: invalid log stream location. Location must be log-group@log-stream.")
 )
 
 var opts struct {
@@ -35,23 +33,39 @@ func AWSConfig() *aws.Config {
 	return defaults.DefaultConfig
 }
 
-func parseArgs(args []string) ([]*url.URL, error) {
-	urls := make([]*url.URL, 0, len(args))
+type LogStreamLocation struct {
+	GroupName  string
+	StreamName string
+}
+
+func ParseArg(arg string) (*LogStreamLocation, error) {
+	i := strings.Index(arg, "@")
+	if i < 0 {
+		return nil, errInvalidLogStreamLocation
+	}
+	groupName := arg[:i]
+	streamName := arg[i+1:]
+
+	if streamName == "" {
+		return nil, errInvalidLogStreamLocation
+	}
+
+	return &LogStreamLocation{
+		GroupName:  groupName,
+		StreamName: streamName,
+	}, nil
+}
+
+func ParseArgs(args []string) ([]*LogStreamLocation, error) {
+	locations := make([]*LogStreamLocation, 0, len(args))
 	for _, arg := range args {
-		u, err := url.Parse(arg)
+		loc, err := ParseArg(arg)
 		if err != nil {
 			return nil, err
 		}
-		if u.Scheme != schema {
-			return nil, errInvalidSchema
-		}
-		if u.Host == "" || u.Path == "" || u.Path == "/" {
-			return nil, errInvalidURL
-		}
-		u.Path = strings.TrimPrefix(u.Path, "/")
-		urls = append(urls, u)
+		locations = append(locations, loc)
 	}
-	return urls, nil
+	return locations, nil
 }
 
 func main() {
@@ -130,7 +144,7 @@ func realMain() int {
 		return 1
 	}
 
-	urls, err := parseArgs(args)
+	locations, err := ParseArgs(args)
 	if err != nil {
 		log.Println(err)
 		return 1
@@ -145,9 +159,9 @@ func realMain() int {
 		limit:    opts.Number,
 	}
 
-	for _, u := range urls {
-		groupName := u.Host
-		streamName := u.Path
+	for _, loc := range locations {
+		groupName := loc.GroupName
+		streamName := loc.StreamName
 
 		if opts.Follow {
 			go poller.Poll(groupName, streamName)
